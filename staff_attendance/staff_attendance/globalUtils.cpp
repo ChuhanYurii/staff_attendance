@@ -1,22 +1,23 @@
 #include "stdafx.h"
+#include <fstream>
 #include <iostream>
 #include <conio.h>
 #include <windows.h>
 #include <stdio.h>
 #include <iomanip>
 #include <vector>
+#include <string>
+#include <algorithm>
+#include "ClassStaff.h"
 
 using namespace std;
 
 // приветствие
 void coutWelcome()
 {
-	cout << "\t\t\tПроектная работа\n";
-	cout << "\n\n\n\n\n";
-	cout << "   В задании реализована обработка экспертных оценок двумя методами:\n\n";
-	cout <<	"\t- групповая экспертная оценка при непосредственном оценивании\n";
-	cout << "\t- обработка парных сравнений\n";
-	cout << "\n\n\nДля того, чтобы начать, нажммите любую клавишу . . .";
+	cout << "\n\n\n\n\n\t\t\tПроектная работа\n";
+	cout << "\t\tОтчёт о посещаемости сотрудников";
+	cout << "\n\n\n\n\nДля того, чтобы начать, нажммите любую клавишу . . .";
 }
 
 // установить цвет шрифта в консоле
@@ -114,6 +115,109 @@ int getMode(unsigned int countMode)
 
 	return mode;
 }
+
+// чтение из файла
+int read_file(char *fileName, vector <Staff*> &StaffInfo)
+{		
+	ifstream file;
+	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+	string tempStr;
+	bool isWorkTime = false;
+	int countStaff = 0;
+
+	file.open(fileName, ios::in);
+	if (!file.is_open()) // если файл не открыт
+	{
+		SetConsoleTextColor(hStdout, FOREGROUND_RED);
+		cout << "Файл не может быть открыт!\n"; // сообщить об этом
+		SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
+		return 0;
+	}
+	else
+	{
+		StaffInfo.clear();
+
+		while (!file.eof()) //считывание с файла
+		{
+			getline(file, tempStr);
+			
+			if (tempStr == "staff") {
+				StaffInfo.push_back(new Staff());
+				countStaff++;
+				StaffInfo[StaffInfo.size() - 1]->setID(countStaff);
+				isWorkTime = false;
+				continue;
+			}
+			
+			if (tempStr == "worktime") {
+				isWorkTime = true;
+				continue;
+			}
+			
+			if (tempStr == "endstaff") continue;
+			
+			if (isWorkTime){
+				if (tempStr.find("date:") != -1) {
+					tempStr = tempStr.substr(6);
+					StaffInfo[StaffInfo.size() - 1]->setDate(tempStr);
+				}
+				if (tempStr.find("timebegin:") != -1) {
+					tempStr = tempStr.substr(11);
+					StaffInfo[StaffInfo.size() - 1]->setTimeBegin(tempStr);
+				}
+				if (tempStr.find("timeend:") != -1) {
+					tempStr = tempStr.substr(9);
+					StaffInfo[StaffInfo.size() - 1]->setTimeEnd(tempStr);
+				}
+			}
+			else {
+				StaffInfo[StaffInfo.size() - 1]->setName(tempStr);
+			}
+			
+		}
+	}
+	file.close();
+
+	return 1;
+}
+
+//запись в файл
+void write_file(char *fileName, vector <Staff*> &StaffInfo)
+{
+	fstream file;      
+	file.open(fileName, ios::out);
+	
+	for (unsigned int i = 0; i < StaffInfo.size(); ++i)
+	{
+		if (i != 0) file << endl;
+		file << "staff" << endl;
+		file << StaffInfo[i]->getName() << endl;
+		for (unsigned int j = 0; j < StaffInfo[i]->getDate().size(); ++j)
+		{
+			file << "worktime" << endl;
+			file << "date: " << StaffInfo[i]->getDate()[j] << endl;
+			file << "timebegin: " << StaffInfo[i]->getTimeBegin()[j] << endl;
+			file << "timeend: " << StaffInfo[i]->getTimeEnd()[j] << endl;
+		}
+		file << "endstaff";
+	}
+
+	file.close();
+}
+
+void ShowStaffList(vector <Staff*> &StaffInfo)
+{
+	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
+	cout << "\nСписок сотрудников\n";
+	SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
+	for (unsigned int i = 0; i < StaffInfo.size(); ++i)
+	{
+		cout << "\t" << StaffInfo[i]->getID() << ". " << StaffInfo[i]->getName().c_str() << endl;
+	}
+}
+
+
 
 void inputMarks(int countExp, int countEvent, double **&mark)
 {
@@ -361,153 +465,4 @@ void coutMarksPair(int countExp, int countEvent, double **mark)
 			}
 		}
 	}
-}
-
-void calcPairMarks(int countExp, int countEvent, double Eps, double **markPair)
-{
-	double k0 = 0;
-	vector<double*> x, k;
-	vector<double> lambda;
-	
-	double ** mark;
-	mark = new double*[countEvent];
-	for (size_t j = 0; j < countEvent; j++)
-	{
-		mark[j] = new double[countEvent];
-	}
-
-	int count0 = 0, count1 = 0;
-	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-
-	SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-	cout << "\n\n Математическое ожидание\n ";
-	cout << "\t   ";
-	for (size_t j = 0; j < countEvent; ++j)
-	{
-		cout << setw(8) << j + 1;
-	}
-	for (size_t j = 0; j < countEvent; ++j)
-	{
-		SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-		cout << "\n событие " << j + 1 << ": ";
-		for (size_t q = 0; q < countEvent; ++q)
-		{
-			count0 = 0, count1 = 0;
-			for (size_t i = 0; i < countExp; ++i)
-			{
-				if (markPair[i][j * countEvent * countEvent + q] == 0) count0++;
-				if (markPair[i][j * countEvent * countEvent + q] == 1) count1++;
-			}
-
-			mark[j][q] = 0.5 + 1.0 * (count1 - count0) / (2 * countExp);
-			cout << setw(8) << setprecision(4) << fixed << mark[j][q];
-		}
-	}
-
-	
-	double *tempX;// = new double[countEvent];
-	double *tempK;// = new double[countExp];
-	double tempLambda = 0;
-
-	double isMax = 0;
-	int iteration = 1;
-	
-	k0 = 1.0;
-
-	SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-	cout << "\n\n Приближение " << iteration;
-	cout << "\nY: ";
-	tempX = newX(countEvent);
-	for (int i = 0; i < countEvent; ++i)
-	{
-		tempX[i] = 0;
-		for (int j = 0; j < countExp; ++j)
-		{
-			tempX[i] += mark[i][j];
-		}
-		tempX[i] *= k0;
-		cout << setprecision(5) << fixed << tempX[i] << "  ";
-	}
-	x.push_back(tempX);
-
-	// нормированный коефициент
-	SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-	cout << "\nНормированный коефициент: ";
-	SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
-	for (int i = 0; i < countEvent; ++i)
-	{
-		tempLambda += x[0][i];
-	}
-	cout << setprecision(5) << fixed << tempLambda << "  ";
-	lambda.push_back(tempLambda);
-
-	// коеф. относительной важности
-	SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-	cout << "\nКоеф. относительной важности: ";
-	SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
-	tempK = newK(countEvent);
-	for (int i = 0; i < countEvent; ++i)
-	{
-		tempK[i] = (1. / lambda[0])* x[0][i];
-		cout << setprecision(5) << fixed << tempK[i] << "  ";
-	}
-	k.push_back(tempK);
-
-	do
-	{
-		iteration++;
-		SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-		cout << "\n\n Приближение " << iteration;
-		
-		cout << "\nY: ";
-		tempX = newX(countEvent);
-		SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
-		for (int i = 0; i < countEvent; ++i)
-		{
-			tempX[i] = 0;
-			for (int j = 0; j < countExp; ++j)
-			{
-				tempX[i] += mark[i][j] * k[k.size() - 1][j];
-			}
-			cout << setprecision(5) << fixed << tempX[i] << "  ";
-		}
-		x.push_back(tempX);
-
-		// нормированный коефициент
-		SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-		cout << "\nНормированный коефициент: ";
-		SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
-		tempLambda = 0;
-		for (int i = 0; i < countEvent; ++i)
-		{
-			tempLambda += x[x.size() - 1][i];
-		}
-		cout << setprecision(5) << fixed << tempLambda << "  ";
-		lambda.push_back(tempLambda);
-
-		SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-		// коеф. относительной важности
-		cout << "\nКоеф. относительной важности: ";
-		SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
-		tempK = newK(countEvent);
-		for (int i = 0; i < countEvent; ++i)
-		{
-			tempK[i] = (1. / lambda[lambda.size() - 1])* x[x.size() - 1][i];
-			cout << setprecision(5) << fixed << tempK[i] << "  ";
-		}
-		k.push_back(tempK);
-
-		isMax = abs(k[k.size() - 1][0] - k[k.size() - 2][0]);
-		for (int j = 1; j < countEvent; ++j)
-		{
-			if (abs(k[k.size() - 1][j] - k[k.size() - 2][j]) > isMax)
-				isMax = abs(k[k.size() - 1][j] - k[k.size() - 2][j]);
-		}
-
-	} while (isMax >= Eps);
-
-	SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-	cout << "\n\n Результат: " << endl;
-	SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
-	coutResult(countEvent, k); 
 }

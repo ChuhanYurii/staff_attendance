@@ -1,0 +1,28 @@
+staff
+Иванов Иван Иванович
+worktime
+date: 10.04.2017
+timebegin: 10.00
+timeend: 15.00
+worktime
+date: 11.04.2017
+timebegin: 11.30
+timeend: 17.00
+endstaff
+staff
+Петренко Василий Степанович
+worktime
+date: 11.04.2017
+timebegin: 9.00
+timeend: 13.00
+worktime
+date: 12.04.2017
+timebegin: 10.00
+timeend: 18.00
+endstaff
+staff
+Test Admin C++
+endstaff
+staff
+testing
+endstaff

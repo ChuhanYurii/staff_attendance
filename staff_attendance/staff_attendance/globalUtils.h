@@ -1,4 +1,5 @@
 #include <vector>
+#include "ClassStaff.h"
 
 void coutWelcome();
 
@@ -12,6 +13,14 @@ double getDouble();
 
 int getMode(unsigned int countMode);
 
+int read_file(char *fileName, std::vector <Staff*> &StaffInfo);
+
+void write_file(char *fileName, vector <Staff*> &StaffInfo);
+
+void ShowStaffList(vector <Staff*> &StaffInfo);
+
+
+
 void inputMarks(int countExp, int countEvent, double **&mark);
 
 void coutMarks(int countExp, int countEvent, double **mark);
@@ -24,5 +33,3 @@ void coutResult(int countEvent, std::vector<double*> x);
 void inputMarksPair(int countExp, int countEvent, double **&mark);
 
 void coutMarksPair(int countExp, int countEvent, double **mark);
-
-void calcPairMarks(int countExp, int countEvent, double Eps, double **markPair);

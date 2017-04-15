@@ -6,7 +6,12 @@
 #include <stdio.h>
 #include <windows.h>
 #include <iomanip>
+#include <fstream>
 #include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string>
+
 #include "globalUtils.h"
 
 using namespace std;
@@ -21,7 +26,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 
-	double ** mark = 0;
+	vector <Staff*> StaffInfo;
 
 	// приветствие
 	coutWelcome();
@@ -32,18 +37,54 @@ int _tmain(int argc, _TCHAR* argv[])
 	{
 		system("cls");
 		SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-		cout << ">Выберите, какой метод вы желаете использовать.\n";
+		cout << ">Выберите необходимое действие.\n";
 		SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
-		cout << "\n\t1. Групповая экспертная оценка";
-		cout << "\n\t2. Обработка парных сравнений";
+		cout << "\n\t1. Просмотр списка сотрудников";
+		cout << "\n\t2. Фиксация времени прихода и ухода с работы";
+		cout << "\n\t3. Общая информация о каждом работнике ";
+		cout << "\n\t4. Добавление работника ";
+		cout << "\n\t5. Редактирование информации о работнике ";
+		cout << "\n\t6. Удаление работника ";
+		cout << "\n\t7. Сортировка списка работников по имени ";
+		cout << "\n\t7. Поиск работника по имени ";
+		cout << "\n\t8. Рейтинг работников";
+		cout << "\n\t9. Посчитать зарплату";
 		SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
+				
+		int downloadMode = getMode(9);
+		string tempStr = "";
+		
+		read_file("staff.txt", StaffInfo);
+		
+		switch (downloadMode)
+		{
+		case 1: // Просмотр списка сотрудников
+			ShowStaffList(StaffInfo);
+			break;
 
+		case 4:
+			SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
+			cout << "\n Введите ФИО нового работника ==> ";
+			SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
+			getline(cin, tempStr);
+			StaffInfo.push_back(new Staff());
+			StaffInfo[StaffInfo.size() - 1]->setID(StaffInfo.size());
+			StaffInfo[StaffInfo.size() - 1]->setName(tempStr);
+			SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
+			cout << "\n Новый работник добавлен ";
+			break;
+		 
+		default:
+			break;
+		}
+
+		write_file("staff.txt", StaffInfo);
 
 		_getch();
 		SetConsoleTextColor(hStdout, FOREGROUND_RED);
 		cout << "\n\n>--------------------------------------------------";
 		cout << "\n\tДля выхода - нажмите ESC";
-		cout << "\n\tДля нового расчёта - нажмите любую клавишу";
+		cout << "\n\tДля нового действия - нажмите любую клавишу";
 
 		char c;
 		c = _getch();
