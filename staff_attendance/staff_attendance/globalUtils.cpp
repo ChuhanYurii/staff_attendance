@@ -73,25 +73,6 @@ double getDouble()
 	return res;
 }
 
-double getDoublePair()
-{
-	char numbers[4] = { '0', '1', '5', ',' };
-	string n;
-	char ch;
-
-	while ((ch = _getch()) != '\r')//enter
-	if (test(ch, numbers, 4))
-	{
-		n += ch;
-		cout << ch;
-	}
-
-	cout << endl;
-	//return strtod(n.c_str(), end_ptr);
-	const char* str = n.c_str();
-	double res = atof(str);
-	return res;
-}
 
 // выбор пункта меню
 int getMode(unsigned int countMode)
@@ -213,28 +194,14 @@ void ShowStaffList(vector <Staff*> &StaffInfo)
 	SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
 	for (unsigned int i = 0; i < StaffInfo.size(); ++i)
 	{
+		StaffInfo[i]->setID(i + 1);
 		cout << "\t" << StaffInfo[i]->getID() << ". " << StaffInfo[i]->getName().c_str() << endl;
 	}
 }
 
 
 
-void inputMarks(int countExp, int countEvent, double **&mark)
-{
-	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-	for (size_t i = 0; i < countExp; ++i)
-	{
-		SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-		cout << "\n  Oценки Ёксперта є " << i + 1 << endl;
-		for (size_t j = 0; j < countEvent; ++j)
-		{
-			SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-			cout << "    событие " << j + 1 << " ==> ";
-			SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
-			mark[j][i] = getDouble();
-		}
-	}
-}
+
 
 // вывод на экран значений 
 void coutMarks(int countExp, int countEvent, double **mark)
@@ -414,31 +381,6 @@ void calcGroupMarks(int countExp, int countEvent, double Eps, double **mark)
 }
 
  
-
-void inputMarksPair(int countExp, int countEvent, double **&mark)
-{
-	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-	for (size_t i = 0; i < countExp; ++i)
-	{
-		SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-		cout << "\n  ќценки парного сравнени€ от Ёксперта є " << i + 1 << endl;
-		for (size_t j = 0; j < countEvent; ++j)
-		{
-			for (size_t q = 0; q < countEvent; ++q)
-			{
-				if (q != j)
-				{
-					SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-					cout << "    событи€ " << j + 1 << " и " << q + 1 << " ==> ";
-					SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
-					mark[i][j * countEvent * countEvent + q] = getDoublePair();
-				}
-				else mark[i][j * countEvent * countEvent + q] = 0.5;
-			}
-		}
-	}
-}
-
 void coutMarksPair(int countExp, int countEvent, double **mark)
 {
 	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);

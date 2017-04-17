@@ -21,7 +21,6 @@ void ShowStaffList(vector <Staff*> &StaffInfo);
 
 
 
-void inputMarks(int countExp, int countEvent, double **&mark);
 
 void coutMarks(int countExp, int countEvent, double **mark);
 
@@ -29,7 +28,5 @@ void calcGroupMarks(int countExp, int countEvent, double Eps, double **mark);
 
 void coutResult(int countEvent, std::vector<double*> x);
 
-
-void inputMarksPair(int countExp, int countEvent, double **&mark);
 
 void coutMarksPair(int countExp, int countEvent, double **mark);

@@ -1,4 +1,7 @@
 staff
+Test Admin Perec
+endstaff
+staff
 Иванов Иван Иванович
 worktime
 date: 10.04.2017
@@ -10,6 +13,17 @@ timebegin: 11.30
 timeend: 17.00
 endstaff
 staff
+Кириченко К К
+worktime
+date: 17.04.2017
+timebegin: 08.00
+timeend: 12.00
+worktime
+date: 16.04.2017
+timebegin: 07.30
+timeend: 15.30
+endstaff
+staff
 Петренко Василий Степанович
 worktime
 date: 11.04.2017
@@ -19,10 +33,4 @@ worktime
 date: 12.04.2017
 timebegin: 10.00
 timeend: 18.00
-endstaff
-staff
-Test Admin C++
-endstaff
-staff
-testing
 endstaff
