@@ -53,10 +53,12 @@ int _tmain(int argc, _TCHAR* argv[])
 		cout << "\n\t10. Посчитать зарплату";
 		SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
 				
-		int downloadMode = getMode(9);
+		int downloadMode = getMode(10);
 		
 		string tempStr = "";
-		int idStaff = 1;
+		int idStaff = 1, month = 1;
+		double salary = 0., _worktime = 0.;
+		COORD position;
 		
 		read_file("staff.txt", StaffInfo);
 		
@@ -86,13 +88,13 @@ int _tmain(int argc, _TCHAR* argv[])
 			StaffInfo[idStaff - 1]->setDate(tempStr);
 
 			SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-			cout << " Введите время прихода на работу в формате чч.мм ==> ";
+			cout << " Введите время прихода на работу в формате чч:мм ==> ";
 			SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
 			getline(cin, tempStr);			
 			StaffInfo[idStaff - 1]->setTimeBegin(tempStr);
 
 			SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-			cout << " Введите время ухода с работы в формате чч.мм ==> ";
+			cout << " Введите время ухода с работы в формате чч:мм ==> ";
 			SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
 			getline(cin, tempStr);			
 			StaffInfo[idStaff - 1]->setTimeEnd(tempStr);
@@ -206,7 +208,6 @@ int _tmain(int argc, _TCHAR* argv[])
 
 			sort(tempStaffInfo.begin(), tempStaffInfo.end(), sort_object);
 			
-			COORD position;
 			SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
 			cout << "\nРейтинг работников по отработанному времени ";
 			cout << "\n\nНомер         ФИО                     К-во часов";
@@ -221,6 +222,41 @@ int _tmain(int argc, _TCHAR* argv[])
 				position.Y = y;
 				SetConsoleCursorPosition(hStdout, position);
 				cout << setw(11) << setprecision(2) << fixed << tempStaffInfo[i]->getAllWorkTime();
+				cout << endl;
+			}
+
+			break;
+
+		case 10: //Посчитать зарплату
+			SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
+			cout << "\n Введите номер месяца (в формате двух цифр), за который необходимо посчитать зарплату ==> ";
+			SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
+			getline(cin, tempStr);
+
+			SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
+			cout << "\n Введите почасовую оплату, грн ==> ";
+			SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
+			salary = getDouble();
+
+			SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
+			cout << "\nНомер         ФИО                     ЗП за " << tempStr.c_str() << "-ый месяц";
+			SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
+
+			for (size_t i = 0, y = 19; i < StaffInfo.size(); ++i,++y)
+			{
+				_worktime = 0.;
+				for (size_t j = 0; j < StaffInfo[i]->getDate().size(); ++j)
+				{
+					if (StaffInfo[i]->getDate()[j].substr(3,2) == tempStr) _worktime += StaffInfo[i]->getWorkTime()[j];
+				}
+								
+				cout << "\n" << setw(3) << StaffInfo[i]->getID() << ". ";
+				++y;
+				cout << StaffInfo[i]->getName().c_str();
+				position.X = 33;
+				position.Y = y;
+				SetConsoleCursorPosition(hStdout, position);
+				cout << setw(13) << setprecision(2) << fixed << _worktime * salary;
 				cout << endl;
 			}
 

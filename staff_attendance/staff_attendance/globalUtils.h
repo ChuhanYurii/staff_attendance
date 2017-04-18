@@ -22,12 +22,3 @@ void ShowStaffList(vector <Staff*> &StaffInfo);
 void ShowStaffInfoList(vector <Staff*> &StaffInfo);
 
 bool FindStaff(vector <Staff*> &StaffInfo, string findStr);
-
-
-
-
-void coutMarks(int countExp, int countEvent, double **mark);
-
-void calcGroupMarks(int countExp, int countEvent, double Eps, double **mark);
-
-void coutResult(int countEvent, std::vector<double*> x);

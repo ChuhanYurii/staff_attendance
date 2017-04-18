@@ -81,8 +81,8 @@ public:
 			tempStr = timeEnd[i].substr(3,2);
 			minuteEnd = atoi(tempStr.c_str());
 
-			if (minuteEnd - minuteBegin < 0) workTime.push_back(hourEnd - hourBegin - 1 + 1. * (60 + minuteEnd - minuteBegin) / 100); 
-			else workTime.push_back(hourEnd - hourBegin + 1. * (minuteEnd - minuteBegin) / 100);
+			if (minuteEnd - minuteBegin < 0) workTime.push_back(hourEnd - hourBegin - 1 + 1. * (60 + minuteEnd - minuteBegin) / 60); 
+			else workTime.push_back(hourEnd - hourBegin + 1. * (minuteEnd - minuteBegin) / 60);
 		}
 		SetAllWorkTime();
 	}
