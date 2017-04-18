@@ -135,7 +135,10 @@ int read_file(char *fileName, vector <Staff*> &StaffInfo)
 				continue;
 			}
 			
-			if (tempStr == "endstaff") continue;
+			if (tempStr == "endstaff") {
+				StaffInfo[StaffInfo.size() - 1]->setWorkTime();
+				continue;
+			}
 			
 			if (isWorkTime){
 				if (tempStr.find("date:") != -1) {
@@ -197,6 +200,49 @@ void ShowStaffList(vector <Staff*> &StaffInfo)
 		StaffInfo[i]->setID(i + 1);
 		cout << "\t" << StaffInfo[i]->getID() << ". " << StaffInfo[i]->getName().c_str() << endl;
 	}
+}
+
+void ShowStaffInfoList(vector <Staff*> &StaffInfo)
+{
+	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+	COORD position;
+	SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
+	cout << "\nОбщая информация о каждом работнике\n";
+	cout << "\nНомер         ФИО                     Дата      Приход     Уход     К-во часов";
+	SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
+	for (size_t i = 0, y = 17; i < StaffInfo.size(); ++i,++y)
+	{
+		StaffInfo[i]->setID(i + 1);
+		cout << "\n" << setw(3) << StaffInfo[i]->getID() << ". ";
+		++y;
+		cout << StaffInfo[i]->getName().c_str();
+		for (size_t j = 0; j < StaffInfo[i]->getDate().size(); ++j)
+		{
+			position.X = 33;
+			position.Y = y;
+			SetConsoleCursorPosition(hStdout, position);
+			cout << setw(12) << StaffInfo[i]->getDate()[j].c_str();
+			cout << setw(9) << StaffInfo[i]->getTimeBegin()[j].c_str();
+			cout << setw(10) << StaffInfo[i]->getTimeEnd()[j].c_str();
+			cout << setw(11) << setprecision(2) << fixed << StaffInfo[i]->getWorkTime()[j];
+			cout << endl;
+			++y;
+		}
+		cout << endl;
+	}
+}
+
+bool FindStaff(vector <Staff*> &StaffInfo, string findStr)
+{
+	bool result = false;
+	for (unsigned int i = 0; i < StaffInfo.size(); ++i)
+	{
+		if (StaffInfo[i]->getName().find(findStr) != -1) { 
+			cout << "\t" << StaffInfo[i]->getName().c_str() << endl;
+			result = true;
+		}
+	}
+	return result;
 }
 
 
@@ -378,33 +424,4 @@ void calcGroupMarks(int countExp, int countEvent, double Eps, double **mark)
 	cout << "\n\n Результат: " << endl;
 	SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
 	coutResult(countEvent, x);
-}
-
- 
-void coutMarksPair(int countExp, int countEvent, double **mark)
-{
-	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-	
-	for (size_t i = 0; i < countExp; ++i)
-	{
-		SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-		cout << "\n\n  Оценки Эксперта № " << i + 1 << endl;
-		cout << "\t   ";
-		for (size_t j = 0; j < countEvent; ++j)
-		{
-			cout << setw(5) << j + 1;
-		}
-
-		for (size_t j = 0; j < countEvent; ++j)
-		{
-			SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-			cout << "\n событие " << j + 1 << ": ";
-			for (size_t q = 0; q < countEvent; ++q)
-			{
-				SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
-				cout << setw(5) << mark[i][j * countEvent * countEvent + q];
-			}
-		}
-	}
 }

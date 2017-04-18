@@ -28,7 +28,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 
-	vector <Staff*> StaffInfo;
+	vector <Staff*> StaffInfo, tempStaffInfo;
 
 	// приветствие
 	coutWelcome();
@@ -96,9 +96,15 @@ int _tmain(int argc, _TCHAR* argv[])
 			SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
 			getline(cin, tempStr);			
 			StaffInfo[idStaff - 1]->setTimeEnd(tempStr);
+
+			StaffInfo[idStaff - 1]->setWorkTime();
 			
 			SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
 			cout << "\n Время зафиксировано ";
+			break;
+
+		case 3: // Общая информация о каждом работнике
+			ShowStaffInfoList(StaffInfo);
 			break;
 
 		case 4: //Добавление работника
@@ -158,21 +164,67 @@ int _tmain(int argc, _TCHAR* argv[])
 		case 7: //Сортировка списка работников по имени
 			ShowStaffList(StaffInfo);
 			
-			struct sort_class
+			struct sort_class2
 			{
 				bool operator() (Staff* i, Staff* j)
 				{
 					return (i->getName() < j->getName());
 				}
-			} sort_object;
+			} sort_object2;
 
-			sort(StaffInfo.begin(), StaffInfo.end(), sort_object);
+			sort(StaffInfo.begin(), StaffInfo.end(), sort_object2);
 			
 			SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
 			cout << "\n После сортировки";
 			ShowStaffList(StaffInfo);
 			break;
 
+
+		case 8: //Поиск работника по имени
+			SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
+			cout << "\n Поиск работника ==> ";
+			SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
+			getline(cin, tempStr);
+
+			if (!(FindStaff(StaffInfo, tempStr))) {
+				SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
+				cout << "\n Работника с таким именем нет";
+			}
+
+			break;
+
+		case 9: //Рейтинг работников
+			tempStaffInfo = StaffInfo;
+
+			struct sort_class
+			{
+				bool operator() (Staff* i, Staff* j)
+				{
+					return (i->getAllWorkTime() > j->getAllWorkTime());
+				}
+			} sort_object;
+
+			sort(tempStaffInfo.begin(), tempStaffInfo.end(), sort_object);
+			
+			COORD position;
+			SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
+			cout << "\nРейтинг работников по отработанному времени ";
+			cout << "\n\nНомер         ФИО                     К-во часов";
+			SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
+			for (size_t i = 0, y = 17; i < StaffInfo.size(); ++i,++y)
+			{
+				tempStaffInfo[i]->setID(i + 1);
+				cout << "\n" << setw(3) << tempStaffInfo[i]->getID() << ". ";
+				++y;
+				cout << tempStaffInfo[i]->getName().c_str();
+				position.X = 33;
+				position.Y = y;
+				SetConsoleCursorPosition(hStdout, position);
+				cout << setw(11) << setprecision(2) << fixed << tempStaffInfo[i]->getAllWorkTime();
+				cout << endl;
+			}
+
+			break;
 		 
 		default:
 			break;
