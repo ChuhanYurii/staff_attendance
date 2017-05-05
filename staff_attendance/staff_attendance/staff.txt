@@ -10,7 +10,7 @@ timebegin: 09:00
 timeend: 17:30
 endstaff
 staff
-Иванов Иван Иванович
+Andruska Martin 
 worktime
 date: 10.04.2017
 timebegin: 10:00
@@ -21,7 +21,7 @@ timebegin: 11:30
 timeend: 17:00
 endstaff
 staff
-Кириченко Юрий Дмитриевич
+Bako Zdenek
 worktime
 date: 16.04.2017
 timebegin: 07:30
@@ -32,7 +32,7 @@ timebegin: 08:00
 timeend: 12:00
 endstaff
 staff
-Петренко Василий Степанович
+Barton Jan
 worktime
 date: 11.04.2017
 timebegin: 09:00
@@ -43,7 +43,7 @@ timebegin: 10:00
 timeend: 18:00
 endstaff
 staff
-Фролов Федор Иванович
+Bauko Michal
 worktime
 date: 20.04.2017
 timebegin: 10:30

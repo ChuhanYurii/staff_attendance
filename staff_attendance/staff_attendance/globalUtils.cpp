@@ -15,9 +15,9 @@ using namespace std;
 // приветствие
 void coutWelcome()
 {
-	cout << "\n\n\n\n\n\t\t\tПроектная работа\n";
-	cout << "\t\tОтчёт о посещаемости сотрудников";
-	cout << "\n\n\n\n\nДля того, чтобы начать, нажммите любую клавишу . . .";
+	cout << "\n\n\n\n\n\t\t\tZapoctovy program c.21\n";
+	cout << "\t\t\tEvidence dochazky";
+	cout << "\n\n\n\n\naby zacat, stiscnete libovolnou klavesnici . . .";
 }
 
 // установить цвет шрифта в консоле
@@ -81,14 +81,14 @@ int getMode(unsigned int countMode)
 	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 	while (true)
 	{
-		cout << "\n\n Ваш выбор (введите цифру) ==> ";
+		cout << "\n\n zadejte cislo ==> ";
 		SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
 		mode = getNumber();
 
 		if ((mode > countMode) || (mode == 0))
 		{
 			SetConsoleTextColor(hStdout, FOREGROUND_RED);
-			cout << "Введёное значение не соответствует пунктам меню !";
+			cout << "zvolena hodnota neodpovida seznamu !";
 			SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
 		}
 		else break;
@@ -110,7 +110,7 @@ int read_file(char *fileName, vector <Staff*> &StaffInfo)
 	if (!file.is_open()) // если файл не открыт
 	{
 		SetConsoleTextColor(hStdout, FOREGROUND_RED);
-		cout << "Файл не может быть открыт!\n"; // сообщить об этом
+		cout << "File can not open!\n"; // сообщить об этом
 		SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
 		return 0;
 	}
@@ -193,7 +193,7 @@ void ShowStaffList(vector <Staff*> &StaffInfo)
 {
 	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-	cout << "\nСписок сотрудников\n";
+	cout << "\nseznam zamestnancu\n";
 	SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
 	for (unsigned int i = 0; i < StaffInfo.size(); ++i)
 	{
@@ -207,8 +207,8 @@ void ShowStaffInfoList(vector <Staff*> &StaffInfo)
 	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 	COORD position;
 	SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-	cout << "\nОбщая информация о каждом работнике\n";
-	cout << "\nНомер         ФИО                     Дата      Приход     Уход     К-во часов";
+	cout << "\nsouhrna informace o jednotlivych zamestnancich\n";
+	cout << "\nCislo       Jmeno a Prijmeni          Datum     Prichod    Odchod   Pocet hodin";
 	SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
 	for (size_t i = 0, y = 17; i < StaffInfo.size(); ++i,++y)
 	{

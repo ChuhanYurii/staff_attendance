@@ -19,9 +19,9 @@ using namespace std;
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	setlocale(LC_ALL, "rus");
-	SetConsoleCP(1251);
-	SetConsoleOutputCP(1251);
+	//setlocale(LC_ALL, "rus");
+	//SetConsoleCP(1251);
+	//SetConsoleOutputCP(1251);
 
 	system("color F1");
 	system("cls");
@@ -39,18 +39,18 @@ int _tmain(int argc, _TCHAR* argv[])
 	{
 		system("cls");
 		SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-		cout << ">Выберите необходимое действие.\n";
+		cout << ">vyberte pozadovanou akce.\n";
 		SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
-		cout << "\n\t1. Просмотр списка сотрудников";
-		cout << "\n\t2. Фиксация времени прихода и ухода с работы";
-		cout << "\n\t3. Общая информация о каждом работнике ";
-		cout << "\n\t4. Добавление работника ";
-		cout << "\n\t5. Редактирование информации о работнике ";
-		cout << "\n\t6. Удаление работника ";
-		cout << "\n\t7. Сортировка списка работников по имени ";
-		cout << "\n\t8. Поиск работника по имени ";
-		cout << "\n\t9. Рейтинг работников";
-		cout << "\n\t10. Посчитать зарплату";
+		cout << "\n\t1. seznam zamestnacu";
+		cout << "\n\t2. zadat prichod do zamestnani a odchod ze zamestnani";
+		cout << "\n\t3. souhrna informace o jednotlivych zamestnancich ";
+		cout << "\n\t4. vkladani zamestnancu ";
+		cout << "\n\t5. upravovani informace o zamestnance";
+		cout << "\n\t6. odebirani zamestnancu  ";
+		cout << "\n\t7. razeni podle jmena";
+		cout << "\n\t8. vyhledavani podle jmena ";
+		cout << "\n\t9. zebricek zamestnancu podle odpracova doby";
+		cout << "\n\t10. vypocitat mzdu za zvolene obdobi ";
 		SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
 				
 		int downloadMode = getMode(10);
@@ -71,30 +71,30 @@ int _tmain(int argc, _TCHAR* argv[])
 		case 2: //Фиксация времени прихода и ухода с работы
 			ShowStaffList(StaffInfo);
 			SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-			cout << "\n Введите номер работника, время которого необходимо зафиксировать ==> ";
+			cout << "\n zvolte cislo a cas zamestnance ktereho chcete evidovat ==> ";
 			SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
 			idStaff = getNumber();
 
 			if (idStaff > StaffInfo.size()) {
 				SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-				cout << "\n Работника с таким номером нет";
+				cout << "\n Pracovnik z takovymhle cislem neexistuje";
 				break;
 			}
 			
 			SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-			cout << "\n Введите дату в формате дд.мм.гггг ==> ";
+			cout << "\n napiste datum ve formatu dd.cc.rrrr ==> ";
 			SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
 			getline(cin, tempStr);			
 			StaffInfo[idStaff - 1]->setDate(tempStr);
 
 			SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-			cout << " Введите время прихода на работу в формате чч:мм ==> ";
+			cout << " napiste cas prechodu do zamestnani ==> ";
 			SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
 			getline(cin, tempStr);			
 			StaffInfo[idStaff - 1]->setTimeBegin(tempStr);
 
 			SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-			cout << " Введите время ухода с работы в формате чч:мм ==> ";
+			cout << " napiste cas odchosu ze zamestnani  ==> ";
 			SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
 			getline(cin, tempStr);			
 			StaffInfo[idStaff - 1]->setTimeEnd(tempStr);
@@ -102,7 +102,7 @@ int _tmain(int argc, _TCHAR* argv[])
 			StaffInfo[idStaff - 1]->setWorkTime();
 			
 			SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-			cout << "\n Время зафиксировано ";
+			cout << "\n cas je stanoveny ";
 			break;
 
 		case 3: // Общая информация о каждом работнике
@@ -111,56 +111,56 @@ int _tmain(int argc, _TCHAR* argv[])
 
 		case 4: //Добавление работника
 			SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-			cout << "\n Введите ФИО нового работника ==> ";
+			cout << "\n Napiste Jmeno a Prijmeni noveho zamestnance  ==> ";
 			SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
 			getline(cin, tempStr);
 			StaffInfo.push_back(new Staff());
 			StaffInfo[StaffInfo.size() - 1]->setID(StaffInfo.size());
 			StaffInfo[StaffInfo.size() - 1]->setName(tempStr);
 			SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-			cout << "\n Новый работник добавлен ";
+			cout << "\n Novy zamestnanec dodan ";
 			break;
 
 		case 5: //Редактирование информации о работнике
 			ShowStaffList(StaffInfo);
 			SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-			cout << "\n Введите номер работника, ФИО которого необходимо редактировать ==> ";
+			cout << "\n Napiste cislo zamestnance, ktereho chcete upravit ==> ";
 			SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
 			idStaff = getNumber();
 
 			if (idStaff > StaffInfo.size()) {
 				SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-				cout << "\n Работника с таким номером нет";
+				cout << "\n Pracovnik z takovymhle cislem neexistuje";
 				break;
 			}
 			
 			SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-			cout << "\n Введите новое ФИО работника ==> ";
+			cout << "\n Napiste nove Jmeno a Prijmeni zamestance ==> ";
 			SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
 			getline(cin, tempStr);
 			
 			StaffInfo[idStaff - 1]->setName(tempStr);
 			SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-			cout << "\n ФИО изменено ";
+			cout << "\n Jmeno a Prijmeni bylo zmeneno ";
 			break;
 		
 		case 6: //Удаление работника 
 			ShowStaffList(StaffInfo);
 			SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-			cout << "\n Введите номер работника, которого необходимо удалить ==> ";
+			cout << "\n Napiste cislo zamestnance ktereho chcete odebrat ==> ";
 			SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
 			idStaff = getNumber();
 
 			if (idStaff > StaffInfo.size()) {
 				SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-				cout << "\n Работника с таким номером нет";
+				cout << "\n Pracovnik z takovymhle cislem neexistuje";
 				break;
 			}
 
 			StaffInfo.erase(StaffInfo.begin() + idStaff - 1);
 			
 			SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-			cout << "\n Работник удалён";
+			cout << "\n Zamestnanec byl odebran ";
 			break;
 
 		case 7: //Сортировка списка работников по имени
@@ -177,20 +177,20 @@ int _tmain(int argc, _TCHAR* argv[])
 			sort(StaffInfo.begin(), StaffInfo.end(), sort_object2);
 			
 			SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-			cout << "\n После сортировки";
+			cout << "\n po razeni podle jmena";
 			ShowStaffList(StaffInfo);
 			break;
 
 
 		case 8: //Поиск работника по имени
 			SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-			cout << "\n Поиск работника ==> ";
+			cout << "\n vyhledavani zamestnancu ==> ";
 			SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
 			getline(cin, tempStr);
 
 			if (!(FindStaff(StaffInfo, tempStr))) {
 				SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-				cout << "\n Работника с таким именем нет";
+				cout << "\n Neexistuje zamestnance z takovymhle jmenem";
 			}
 
 			break;
@@ -209,8 +209,8 @@ int _tmain(int argc, _TCHAR* argv[])
 			sort(tempStaffInfo.begin(), tempStaffInfo.end(), sort_object);
 			
 			SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-			cout << "\nРейтинг работников по отработанному времени ";
-			cout << "\n\nНомер         ФИО                     К-во часов";
+			cout << "\nzebricek zamestnancu podle odpracovane doby ";
+			cout << "\n\nCislo     Jmeno a Prijmeni           Pocet hodin";
 			SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
 			for (size_t i = 0, y = 17; i < StaffInfo.size(); ++i,++y)
 			{
@@ -229,17 +229,17 @@ int _tmain(int argc, _TCHAR* argv[])
 
 		case 10: //Посчитать зарплату
 			SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-			cout << "\n Введите номер месяца (в формате двух цифр), за который необходимо посчитать зарплату ==> ";
+			cout << "\nnapiste cislo mesice (ve formate dve cislice) za ktery byla vypoctana mzda==>";
 			SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
 			getline(cin, tempStr);
 
 			SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-			cout << "\n Введите почасовую оплату, грн ==> ";
+			cout << "\n zadejte hodinovu sazbu ==> ";
 			SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
 			salary = getDouble();
 
 			SetConsoleTextColor(hStdout, FOREGROUND_BLUE);
-			cout << "\nНомер         ФИО                     ЗП за " << tempStr.c_str() << "-ый месяц";
+			cout << "\nCislo     Jmeno a Prijmeni        sazba za " << tempStr.c_str() << " mesic";
 			SetConsoleTextColor(hStdout, FOREGROUND_GREEN);
 
 			for (size_t i = 0, y = 19; i < StaffInfo.size(); ++i,++y)
@@ -271,8 +271,8 @@ int _tmain(int argc, _TCHAR* argv[])
 		_getch();
 		SetConsoleTextColor(hStdout, FOREGROUND_RED);
 		cout << "\n\n>--------------------------------------------------";
-		cout << "\n\tДля выхода - нажмите ESC";
-		cout << "\n\tДля нового действия - нажмите любую клавишу";
+		cout << "\n\tpro ukonceni stisknete ESC";
+		cout << "\n\taby zacat novou akci stisknete libovolnou klavesnici";
 
 		char c;
 		c = _getch();
